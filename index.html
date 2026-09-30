@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CK77 COM - Permanent WhatsApp Owner & User Chat System</title>
+  
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: #05050a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100dvh; }
+
+    @keyframes autoRgbGlow {
+      0% { border-color: #ff0055; box-shadow: 0 0 35px #ff0055, inset 0 0 20px #ff0055; }
+      25% { border-color: #00ffcc; box-shadow: 0 0 35px #00ffcc, inset 0 0 20px #00ffcc; }
+      50% { border-color: #ffff00; box-shadow: 0 0 35px #ffff00, inset 0 0 20px #ffff00; }
+      75% { border-color: #0055ff; box-shadow: 0 0 35px #0055ff, inset 0 0 20px #0055ff; }
+      100% { border-color: #ff00ff; box-shadow: 0 0 35px #ff00ff, inset 0 0 20px #ff00ff; }
+    }
+
+    @keyframes autoColorText {
+      0% { color: #ff0055; text-shadow: 0 0 10px #ff0055; }
+      33% { color: #00ffcc; text-shadow: 0 0 10px #00ffcc; }
+      66% { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+      100% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+    }
+
+    @keyframes autoButtonBg {
+      0% { background: linear-gradient(135deg, #ff0055, #ff00ff); }
+      33% { background: linear-gradient(135deg, #00ffcc, #0055ff); }
+      66% { background: linear-gradient(135deg, #ffff00, #ff5500); }
+      100% { background: linear-gradient(135deg, #9900ff, #ff0055); }
+    }
+
+    .app-container { width: 100%; max-width: 450px; height: 100dvh; background: #0b0f19; display: flex; flex-direction: column; position: relative; overflow: hidden; animation: autoRgbGlow 6s infinite; border-left: 3px solid; border-right: 3px solid; }
+
+    #authScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a0033 0%, #05050a 100%); z-index: 99999; display: flex; flex-direction: column; padding: 30px 24px; justify-content: center; align-items: center; text-align: center; overflow-y: auto; }
+    
+    .rgb-logo { font-size: 70px; margin-bottom: 15px; animation: autoColorText 3s infinite; cursor: pointer; }
+    .auth-title { font-size: 24px; font-weight: bold; margin-bottom: 5px; animation: autoColorText 4s infinite; cursor: pointer; }
+    .auth-desc { font-size: 14px; margin-bottom: 20px; font-weight: bold; animation: autoColorText 2.5s infinite; }
+    
+    .profile-upload { width: 95px; height: 95px; border-radius: 50%; background: #151b2b; border: 3px dashed; animation: autoRgbGlow 4s infinite; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; cursor: pointer; overflow: hidden; }
+    .profile-upload img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .profile-upload i { font-size: 32px; animation: autoColorText 3s infinite; }
+
+    .input-field { width: 100% !important; background: #111827 !important; border: 2px solid !important; animation: autoRgbGlow 5s infinite; padding: 12px 16px !important; border-radius: 10px !important; color: #fff !important; font-size: 15px !important; margin-bottom: 12px !important; outline: none !important; font-weight: bold; }
+    .btn-main { width: 100%; animation: autoButtonBg 5s infinite; border: none; padding: 14px; border-radius: 10px; color: #fff; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 0 20px rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 10px; }
+
+    #notificationToast { position: absolute; top: -70px; left: 16px; right: 16px; background: #1f2937; border: 2px solid; animation: autoRgbGlow 3s infinite; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; z-index: 999999; transition: top 0.4s ease; }
+    #notificationToast.show { top: 16px; }
+    #notificationToast img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff007f; }
+    .toast-info h5 { font-size: 14px; animation: autoColorText 3s infinite; }
+    .toast-info p { font-size: 12px; color: #00ffcc; font-weight: bold; }
+
+    .whatsapp-header { background: #111827; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid; animation: autoRgbGlow 5s infinite; position: relative; }
+    .header-brand { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; animation: autoColorText 4s infinite; cursor: pointer; user-select: none; }
+    .header-icons i { animation: autoColorText 3s infinite; font-size: 18px; cursor: pointer; transition: 0.2s; }
+
+    .chat-header { background: #111827; padding: 10px 16px; display: none; align-items: center; justify-content: space-between; border-bottom: 2px solid; animation: autoRgbGlow 4s infinite; }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid; animation: autoRgbGlow 3s infinite; }
+    .chat-header-info h4 { font-size: 16px; animation: autoColorText 3s infinite; font-weight: bold; }
+    .chat-header-info p { font-size: 12px; color: #00ffcc; font-weight: bold; }
+
+    .whatsapp-tabs { display: flex; background: #111827; border-bottom: 2px solid; animation: autoRgbGlow 5s infinite; }
+    .wa-tab { flex: 1; padding: 14px 0; text-align: center; font-size: 13px; font-weight: bold; color: #888; cursor: pointer; position: relative; text-transform: uppercase; }
+    .wa-tab.active { animation: autoColorText 3s infinite; }
+    .wa-tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; animation: autoButtonBg 3s infinite; }
+
+    .view-section { flex: 1; display: none; flex-direction: column; overflow: hidden; background: #0b0f19; position: relative; }
+    .view-section.active { display: flex; }
+
+    .list-container { flex: 1; overflow-y: auto; padding: 16px; }
+    .big-poster-card { background: linear-gradient(135deg, #111827, #1f2937); border: 3px solid; animation: autoRgbGlow 5s infinite; border-radius: 22px; overflow: hidden; cursor: pointer; margin-top: 10px; }
+    .poster-banner-img { width: 100%; height: 210px; object-fit: cover; border-bottom: 3px solid; animation: autoRgbGlow 4s infinite; }
+    .poster-body { padding: 18px; text-align: center; }
+    .poster-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid; animation: autoRgbGlow 4s infinite; margin-top: -55px; background: #0b0f19; position: relative; }
+    .poster-body h3 { font-size: 20px; animation: autoColorText 3s infinite; margin: 8px 0 4px 0; }
+    .poster-body p { font-size: 13px; color: #00ffcc; font-weight: bold; margin-bottom: 12px; }
+    .poster-badge { display: inline-block; animation: autoButtonBg 4s infinite; color: #fff; padding: 6px 16px; border-radius: 25px; font-size: 13px; font-weight: bold; text-transform: uppercase; border: 1px solid #fff; }
+
+    .bottom-action-buttons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px 16px; background: #111827; border-top: 2px solid; animation: autoRgbGlow 5s infinite; }
+    .action-big-btn { animation: autoButtonBg 4s infinite; border: none; padding: 10px 4px; border-radius: 12px; color: #fff; font-weight: bold; font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 0 12px rgba(255,255,255,0.3); text-align: center; text-transform: uppercase; }
+    .action-big-btn i { font-size: 16px; }
+
+    .status-section-container { padding: 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 15px; }
+    .status-card-box { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #111827; border-radius: 16px; border: 2px solid; animation: autoRgbGlow 5s infinite; }
+    .status-left { display: flex; align-items: center; gap: 16px; cursor: pointer; flex: 1; }
+    
+    .status-ring-large { width: 58px; height: 58px; border-radius: 50%; padding: 3px; animation: autoButtonBg 3s infinite; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+    .status-ring-large img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #0b0f19; }
+
+    .status-info-text h4 { font-size: 15px; animation: autoColorText 3s infinite; font-weight: bold; }
+    .status-info-text p { font-size: 12px; color: #00ffcc; font-weight: bold; margin-top: 2px; }
+
+    .admin-user-card { display: flex; align-items: center; justify-content: space-between; background: #0b0f19; border: 2px solid #00ffcc; padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
+    .admin-user-card:hover { background: #1f2937; }
+    .admin-user-info { display: flex; align-items: center; gap: 10px; }
+    .admin-user-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #ff00ff; }
+    .admin-user-info h5 { font-size: 14px; color: #00ffcc; font-weight: bold; }
+    .admin-user-info p { font-size: 11px; color: #ffff00; }
+    .chat-open-btn { animation: autoButtonBg 3s infinite; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; color: #fff; cursor: pointer; }
+
+    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; background: #05050a; display: flex; flex-direction: column; gap: 12px; }
+    .message { max-width: 78%; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.5; word-wrap: break-word; position: relative; font-weight: bold; display: flex; flex-direction: column; }
+    .message.sent { animation: autoButtonBg 5s infinite; color: #fff; align-self: flex-end; border-top-right-radius: 0; border: 1px solid #ffff00; }
+    .message.received { background: linear-gradient(135deg, #111827, #1f2937); color: #00ffcc; align-self: flex-start; border-top-left-radius: 0; border: 2px solid; animation: autoRgbGlow 4s infinite; }
+    .message-footer { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 6px; }
+    .message-time { font-size: 10px; animation: autoColorText 3s infinite; }
+    .delete-msg-btn { background: rgba(255,0,85,0.3); border: 1px solid #ff0055; color: #ff0055; font-size: 11px; padding: 2px 6px; border-radius: 4px; cursor: pointer; }
+
+    .message img { max-width: 100%; border-radius: 10px; margin-top: 8px; display: block; max-height: 220px; object-fit: cover; border: 2px solid; animation: autoRgbGlow 4s infinite; cursor: pointer; }
+    .message video { max-width: 100%; border-radius: 10px; margin-top: 8px; display: block; max-height: 220px; border: 2px solid; animation: autoRgbGlow 4s infinite; }
+    .message audio { width: 100%; margin-top: 8px; outline: none; }
+
+    .chat-input-area { padding: 12px 16px; background: #111827; display: flex; gap: 8px; align-items: center; border-top: 2px solid; animation: autoRgbGlow 5s infinite; }
+    .chat-input-area input[type="text"] { flex: 1; background: #05050a; border: 2px solid; animation: autoRgbGlow 4s infinite; padding: 11px 16px; border-radius: 10px; color: #fff; outline: none; font-size: 15px; font-weight: bold; }
+    .chat-icon-btn { background: transparent; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; animation: autoColorText 3s infinite; border: none; font-size: 18px; }
+    .chat-icon-btn.recording { color: #ff0000 !important; animation: pulse 1s infinite; }
+    .send-btn { animation: autoButtonBg 3s infinite; border: none; width: 42px; height: 42px; border-radius: 50%; color: #0b0f19; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
+
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,10,0.88); display: none; justify-content: center; align-items: center; z-index: 100000; }
+    .modal-content { background: #111827; padding: 24px; border-radius: 15px; width: 90%; max-width: 360px; border: 2px solid; animation: autoRgbGlow 4s infinite; text-align: center; }
+    .modal-content img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid; animation: autoRgbGlow 3s infinite; margin-bottom: 12px; }
+    .modal-content h3 { animation: autoColorText 3s infinite; margin-bottom: 6px; font-size: 18px; }
+    .modal-content p { color: #00ffcc; font-size: 13px; margin-bottom: 20px; font-weight: bold; }
+
+    #imagePreviewModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999999; flex-direction: column; padding: 20px; }
+    #fullScreenImg { max-width: 100%; max-height: 75vh; object-fit: contain; border: 3px solid; animation: autoRgbGlow 3s infinite; border-radius: 14px; }
+    #imgCaptionText { animation: autoColorText 3s infinite; font-size: 16px; font-weight: bold; margin-top: 15px; text-align: center; }
+    .close-img-btn { margin-top: 15px; animation: autoButtonBg 3s infinite; color: #fff; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 15px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <div id="imagePreviewModal">
+      <img id="fullScreenImg" alt="Full Preview">
+      <div id="imgCaptionText">स्टोरी / रिजल्ट फोटो</div>
+      <button class="close-img-btn" onclick="closeImagePreview()">बंद करें (Close)</button>
+    </div>
+
+    <div id="notificationToast">
+      <img id="toastAvatar" src="https://via.placeholder.com/150/ffff00/0b0f19?text=T" alt="Sender">
+      <div class="toast-info">
+        <h5 id="toastTitle">नया संदेश मिला</h5>
+        <p id="toastMessage">संदेश यहाँ दिखेगा...</p>
+      </div>
+    </div>
+
+    <!-- लॉगिन स्क्रीन -->
+    <div id="authScreen">
+      <div class="rgb-logo" onclick="handleLogoClickCount()"><i class="fa-solid fa-dice"></i></div>
+      <div class="auth-title" onclick="handleLogoClickCount()">CK77 COM - सट्टा किंग</div>
+      <div class="auth-desc">🎲 परमानेंट WhatsApp चैट सिस्टम</div>
+
+      <div class="profile-upload" onclick="document.getElementById('fileInput').click()">
+        <i class="fa-solid fa-camera" id="uploadIcon"></i>
+        <img id="profilePreview" alt="Profile">
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="loadProfileImage(event)">
+
+      <div id="stepPhone" style="width: 100%;">
+        <input type="text" id="userNameInput" class="input-field" placeholder="अपना असली नाम लिखें" autocomplete="off">
+        <input type="tel" id="userPhoneInput" class="input-field" placeholder="10 अंकों का ओरिजिनल मोबाइल नंबर" maxlength="10" autocomplete="off">
+        <input type="text" id="referralCodeInput" class="input-field" placeholder="रेफरल कोड (ऑटो-लोड होगा)" autocomplete="off">
+        <button type="button" class="btn-main" onclick="verifyAndSendOTP()">सिस्टम जांच करें और OTP भेजें</button>
+      </div>
+
+      <div id="stepOTP" style="width: 100%; display: none;">
+        <input type="password" id="otpInput" class="input-field" placeholder="गुप्त OTP (पासवर्ड) दर्ज करें" maxlength="15" autocomplete="off">
+        <button type="button" class="btn-main" onclick="verifyOTP()">सत्यापित करें और लॉगिन करें</button>
+      </div>
+    </div>
+
+    <!-- मेन हेडर -->
+    <div class="whatsapp-header" id="mainHeader">
+      <div class="header-brand" onclick="handleLogoClickCount()"><i class="fa-solid fa-crown"></i> CK77 सट्टा किंग</div>
+      <div class="header-icons" style="display: flex; gap: 15px; align-items: center;">
+        <i class="fa-solid fa-ellipsis-vertical" onclick="openMyProfileModal()" title="मेरी प्रोफाइल"></i>
+      </div>
+    </div>
+
+    <!-- चैट हेडर -->
+    <div class="chat-header" id="chatHeader">
+      <div class="chat-header-left" onclick="backToChats()">
+        <i class="fa-solid fa-arrow-left" style="font-size: 18px;"></i>
+        <img id="chatHeaderAvatar" class="chat-header-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=60" alt="Avatar">
+        <div class="chat-header-info">
+          <h4 id="chatHeaderName">सट्टा किंग ओनर</h4>
+          <p id="chatHeaderStatus">परमानेंट चैट रूम</p>
+        </div>
+      </div>
+      <div class="header-icons">
+        <i class="fa-solid fa-ellipsis-vertical" onclick="viewOwnerProfileModal()" title="प्रोफाइल"></i>
+      </div>
+    </div>
+
+    <!-- टैब्स -->
+    <div class="whatsapp-tabs" id="whatsappTabs">
+      <div class="wa-tab active" onclick="switchTab('chatsTab', this)">चैट्स</div>
+      <div class="wa-tab" onclick="switchTab('updatesTab', this)">स्टेटस / रिजल्ट</div>
+      <div class="wa-tab" onclick="switchTab('callsTab', this)">नोटिस बोर्ड</div>
+    </div>
+
+    <!-- 1. चैट्स टैब -->
+    <div id="chatsTab" class="view-section active">
+      <div class="list-container">
+        <div class="big-poster-card" onclick="connectToOwner()">
+          <img class="poster-banner-img" src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&auto=format&fit=crop&q=80" alt="Satta Poster">
+          <div class="poster-body">
+            <img class="poster-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60" alt="Owner">
+            <h3>सट्टा किंग दरबार</h3>
+            <p>यहाँ मालिक से आमने-सामने चैट करें 🚀</p>
+            <div class="poster-badge">चैट खोलें <i class="fa-solid fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-action-buttons-grid">
+        <button class="action-big-btn" onclick="shareAppWithFriends()">
+          <i class="fa-solid fa-share-nodes"></i>
+          <span>शेयर</span>
+        </button>
+        <button class="action-big-btn" onclick="openHealthSupport()">
+          <i class="fa-brands fa-instagram"></i>
+          <span>हेल्प सपोर्ट</span>
+        </button>
+        <button class="action-big-btn" onclick="openMyProfileModal()">
+          <i class="fa-solid fa-bars"></i>
+          <span>मेन मेनू</span>
+        </button>
+        <button class="action-big-btn" onclick="switchTab('chatsTab', document.querySelectorAll('.wa-tab')[0])">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>व्हाट्सएप चैट प्ले</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. स्टेटस / रिजल्ट टैब (केवल देखने के लिए, खिलाड़ी स्टेटस नहीं डाल सकता) -->
+    <div id="updatesTab" class="view-section">
+      <div class="status-section-container">
+        <h3 style="font-size: 16px;">दैनिक रिजल्ट और स्टेटस अपडेट</h3>
+        
+        <!-- खिलाड़ी के लिए नोटिस (खिलाड़ी यहाँ से स्टेटस पोस्ट नहीं कर सकता) -->
+        <div id="playerStatusNotice" style="background:#111827; padding:14px; border-radius:12px; border:1px solid #00ffcc; text-align:center;">
+          <p style="font-size: 13px; color: #ffff00; font-weight: bold;">🎲 यहाँ रोजाना गाजियाबाद, गली, दिसावर का रिजल्ट और ओनर के स्टेटस दिखाई देंगे। (आप केवल देख सकते हैं)</p>
+        </div>
+
+        <h4 style="font-size: 13px; color: #888; margin-top: 10px; text-transform: uppercase;">हाल के रिजल्ट & स्टेटस (30 दिन वैलिड)</h4>
+        <div id="statusListFeed" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      </div>
+    </div>
+
+    <!-- 3. नोटिस बोर्ड टैब -->
+    <div id="callsTab" class="view-section">
+      <div class="list-container" style="display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#111827; padding:18px; border-radius:14px; border:2px solid; animation: autoRgbGlow 4s infinite;">
+          <h4 style="font-size:16px; margin-bottom:8px;"><i class="fa-solid fa-bullhorn"></i> परमानेंट चैट नियम</h4>
+          <p style="font-size:13px; line-height:1.5;">सभी चैट, फोटो, वीडियो और वॉयस मैसेज 1 महीने (30 दिन) तक सेव रहते हैं। खिलाड़ी सिर्फ स्टेटस देख सकते हैं, मैसेज और वॉयस रिकॉर्ड भेज सकते हैं।</p>
+        </div>
+        <button class="btn-main" onclick="shareAppWithFriends()"><i class="fa-solid fa-share-nodes"></i> दोस्तों को लिंक शेयर करें</button>
+      </div>
+    </div>
+
+    <!-- चैट रूम -->
+    <div id="chatRoomView" class="view-section">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area">
+        <button class="chat-icon-btn" onclick="document.getElementById('chatMediaInput').click()" title="फोटो/वीडियो भेजें"><i class="fa-solid fa-paperclip"></i></button>
+        <input type="file" id="chatMediaInput" accept="image/*,video/*" style="display:none;" onchange="sendMediaMessage(event)">
+        
+        <input type="text" id="messageInput" placeholder="संदेश या सट्टा अंक टाइप करें..." onkeypress="if(event.key==='Enter') sendMessage()">
+        
+        <button class="chat-icon-btn" id="micRecordBtn" onclick="toggleVoiceRecording()" title="वॉयस रिकॉर्ड करें"><i class="fa-solid fa-microphone"></i></button>
+        <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- प्रोफाइल पॉपअप -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <img id="modalProfileImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60" alt="Profile">
+      <h3 id="modalProfileName">यूजर</h3>
+      <p id="modalProfileStatus">सट्टा किंग प्लेयर</p>
+      <button class="btn-main" onclick="closeModal()">बंद करें</button>
+    </div>
+  </div>
+
+  <!-- ओनर एडमिन पैनल मॉडल (यहाँ से केवल ओनर स्टेटस डाल सकता है) -->
+  <div id="adminModal" class="modal">
+    <div class="modal-content" style="max-width: 410px; text-align: left; max-height: 90vh; overflow-y: auto;">
+      <h3 style="text-align: center; margin-bottom: 6px;"><i class="fa-solid fa-shield-halved"></i> ओनर एडमिन पैनल</h3>
+      <p style="font-size: 11px; text-align: center; margin-bottom: 12px; color: #00ffcc;">खिलाड़ी लिस्ट, ब्रॉडकास्ट और स्टेटस कंट्रोल</p>
+      
+      <label style="font-size: 12px; font-weight: bold; color: #ffff00;">सभी को एक साथ ब्रॉडकास्ट भेजें:</label>
+      <div style="display: flex; gap: 5px; margin-top: 4px; margin-bottom: 12px;">
+        <input type="text" id="broadcastMsgInput" class="input-field" placeholder="संदेश लिखें..." autocomplete="off" style="margin-bottom:0 !important;">
+        <button class="btn-main" onclick="sendBroadcastMessage()" style="width: 100px; margin-bottom:0;">भेजें 🚀</button>
+      </div>
+
+      <label style="font-size: 12px; font-weight: bold; color: #ffff00;">पंजीकृत खिलाड़ी (चैट खोलें):</label>
+      <div id="activeUsersListContainer" style="max-height: 140px; overflow-y: auto; background: #05050a; padding: 8px; border-radius: 8px; margin-top: 4px; margin-bottom: 12px;">
+        कोई खिलाड़ी रजिस्टर नहीं है।
+      </div>
+
+      <label style="font-size: 12px; font-weight: bold; color: #ffff00;">नया स्टेटस / रिजल्ट पोस्ट करें:</label>
+      <div style="background:#05050a; padding:10px; border-radius:8px; margin-top:4px; margin-bottom:12px;">
+        <input type="text" id="statusTitleInput" class="input-field" placeholder="जैसे: गाजियाबाद रिजल्ट - 20 आया 🎯" autocomplete="off" style="margin-bottom:8px !important;">
+        <button class="btn-main" onclick="document.getElementById('statusImageInput').click()" style="margin-bottom:8px;">फोटो/वीडियो चुनें 📱</button>
+        <input type="file" id="statusImageInput" accept="image/*,video/*" style="display:none;" onchange="uploadMyStatusWithTitle(event)">
+        <button class="btn-main" onclick="postTextStatusOnly()" style="background: linear-gradient(135deg, #00ffcc, #0055ff); margin-bottom:0;">केवल टेक्स्ट स्टेटस पोस्ट करें 🚀</button>
+      </div>
+
+      <label style="font-size: 12px; font-weight: bold; color: #ffff00;">स्टेटस और रिजल्ट कंट्रोल:</label>
+      <div id="adminStatusListContainer" style="max-height: 140px; overflow-y: auto; background: #05050a; padding: 8px; border-radius: 8px; margin-top: 4px; margin-bottom: 15px;">
+        कोई स्टेटस नहीं है।
+      </div>
+
+      <button class="btn-main" onclick="closeAdminModal()" style="background: #ff0055;">पैनल बंद करें</button>
+    </div>
+  </div>
+
+  <script>
+    let peer, activeChatTargetPeer = null;
+    let connectedPeersMap = {}; 
+    let userAvatarData = '';
+    let userName = "";
+    let userPhone = "";
+    let myUniquePeerId = "CK77_USER_" + Math.floor(10000 + Math.random() * 90000);
+    const masterOwnerPeerId = "CHANDAN_OWNER_CK77_7870016652";
+
+    let logoClickCounter = 0;
+    let logoClickTimer = null;
+
+    window.onload = function() {
+      cleanupExpiredData();
+      loadSavedStatuses();
+      checkURLReferral();
+      checkPermanentLogin();
+      loadStoredUsersList();
+    };
+
+    function cleanupExpiredData() {
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+      const now = Date.now();
+
+      let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+      savedStatuses = savedStatuses.filter(st => (now - st.id) < thirtyDaysMs);
+      localStorage.setItem('ck77_statuses', JSON.stringify(savedStatuses));
+
+      let allHistories = JSON.parse(localStorage.getItem('ck77_multi_chat') || '{}');
+      Object.keys(allHistories).forEach(pid => {
+        allHistories[pid] = allHistories[pid].filter(msg => (now - (msg.time || now)) < thirtyDaysMs);
+      });
+      localStorage.setItem('ck77_multi_chat', JSON.stringify(allHistories));
+    }
+
+    function handleLogoClickCount() {
+      logoClickCounter++;
+      clearTimeout(logoClickTimer);
+      if (logoClickCounter >= 5) {
+        logoClickCounter = 0;
+        openAdminPanelWithPrompt();
+      } else {
+        logoClickTimer = setTimeout(() => { logoClickCounter = 0; }, 2000);
+      }
+    }
+
+    function openAdminPanelWithPrompt() {
+      let pinPrompt = prompt("🔐 एडमिन कंट्रोल पैनल खोलने के लिए सीक्रेट पिन दर्ज करें:");
+      if(pinPrompt === "787016ck77") {
+        localStorage.setItem('ck77_is_admin', 'true');
+        updateActiveUsersUI();
+        updateAdminStatusUI();
+        document.getElementById('adminModal').style.display = 'flex';
+      } else if(pinPrompt !== null) {
+        alert("⚠ गलत पिन!");
+      }
+    }
+
+    function checkPermanentLogin() {
+      const isLogged = localStorage.getItem('ck77_device_verified');
+      if (isLogged === 'true') {
+        userName = localStorage.getItem('ck77_username') || "यूजर";
+        userPhone = localStorage.getItem('ck77_phone') || "9999999999";
+        myUniquePeerId = localStorage.getItem('ck77_peerid') || myUniquePeerId;
+        userAvatarData = localStorage.getItem('ck77_avatar') || '';
+        
+        document.getElementById('authScreen').style.display = 'none';
+        initPeerSystem();
+      }
+    }
+
+    function checkURLReferral() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref');
+      if (refCode) {
+        document.getElementById('referralCodeInput').value = refCode;
+      }
+    }
+
+    function shareAppWithFriends() {
+      let shareUrl = window.location.origin + window.location.pathname + "?ref=" + myUniquePeerId;
+      let shareText = `🎲 CK77 सट्टा किंग दरबार में जुड़ें और परमानेंट चैट करें!\n\nयहाँ क्लिक करके ऐप खोलें और लॉगिन करें:\n${shareUrl}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'CK77 सट्टा किंग',
+          text: shareText,
+          url: shareUrl,
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareText);
+        alert("✅ शेयर लिंक कॉपी हो गया है! अब इसे WhatsApp या कहीं भी शेयर कर सकते हैं।");
+      }
+    }
+
+    function openHealthSupport() {
+      window.open('https://www.instagram.com/chipmunk.30817218gd?stkn=ZmpwbzB3bGhhMDli', '_blank');
+    }
+
+    function openImagePreview(imgSrc, caption = "फोटो / रिजल्ट") {
+      document.getElementById('fullScreenImg').src = imgSrc;
+      document.getElementById('imgCaptionText').innerText = caption;
+      document.getElementById('imagePreviewModal').style.display = 'flex';
+    }
+
+    function closeImagePreview() {
+      document.getElementById('imagePreviewModal').style.display = 'none';
+    }
+
+    function playNotificationSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.2);
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      } catch(e) {}
+    }
+
+    function showAppNotification(senderName, text) {
+      playNotificationSound();
+      const toast = document.getElementById('notificationToast');
+      document.getElementById('toastTitle').innerText = senderName;
+      document.getElementById('toastMessage').innerText = text;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 4000);
+    }
+
+    function loadProfileImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('profilePreview').src = reader.result;
+        document.getElementById('profilePreview').style.display = 'block';
+        document.getElementById('uploadIcon').style.display = 'none';
+        userAvatarData = reader.result;
+      };
+      if(event.target.files && event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }
+
+    function verifyAndSendOTP() {
+      userName = document.getElementById('userNameInput').value.trim();
+      userPhone = document.getElementById('userPhoneInput').value.trim();
+      
+      if (!userAvatarData) {
+        alert("⚠️ कृपया अपनी ओरिजिनल प्रोफाइल फोटो अपलोड करें!");
+        return;
+      }
+      if (!userName || userName.length < 2) {
+        alert("⚠️ कृपया अपना सही नाम दर्ज करें!");
+        return;
+      }
+      if (!userPhone || userPhone.length !== 10 || isNaN(userPhone)) { 
+        alert("⚠️ कृपया ठीक 10 अंकों का ओरिजिनल मोबाइल नंबर दर्ज करें!"); 
+        return; 
+      }
+
+      alert(`✅ ओरिजिनल जांच सफल!`);
+      document.getElementById('stepPhone').style.display = 'none';
+      document.getElementById('stepOTP').style.display = 'block';
+    }
+
+    function verifyOTP() {
+      const enteredOTP = document.getElementById('otpInput').value.trim();
+
+      if (enteredOTP === "787016ck77" || enteredOTP.length >= 4) {
+        localStorage.setItem('ck77_device_verified', 'true');
+        localStorage.setItem('ck77_phone', userPhone);
+        localStorage.setItem('ck77_username', userName);
+        localStorage.setItem('ck77_peerid', myUniquePeerId);
+        localStorage.setItem('ck77_avatar', userAvatarData);
+        
+        if (enteredOTP === "787016ck77") {
+          localStorage.setItem('ck77_is_admin', 'true');
+        } else {
+          localStorage.removeItem('ck77_is_admin');
+        }
+
+        document.getElementById('authScreen').style.display = 'none';
+        initPeerSystem();
+
+        saveUserToPermanentRegistry(myUniquePeerId, userName, userPhone, userAvatarData);
+
+        const refUsed = document.getElementById('referralCodeInput').value.trim();
+        if (refUsed) {
+          setTimeout(() => {
+            appendMessage(masterOwnerPeerId, `🎁 बधाई हो! आपने रेफरल लिंक से ज्वाइन किया है। आपको **वेलकम बोनस** प्राप्त हुआ है!`, 'received', true);
+            if (peer) {
+              let ownerConn = peer.connect(masterOwnerPeerId);
+              ownerConn.on('open', () => {
+                ownerConn.send(`🔔 [रेफरल अलर्ट]: ${userName} (${userPhone}) ने आपके रेफरल लिंक से ऐप ज्वाइन किया है!`);
+              });
+            }
+          }, 1500);
+        } else {
+          setTimeout(() => {
+            appendMessage(masterOwnerPeerId, `🎉 नमस्ते ${userName}! आपका स्वागत है!`, 'received', true);
+          }, 1000);
+        }
+
+      } else {
+        alert("❌ गलत गुप्त OTP/पासवर्ड!");
+      }
+    }
+
+    function saveUserToPermanentRegistry(peerId, name, phone, avatar) {
+      let registry = JSON.parse(localStorage.getItem('ck77_users_registry') || '{}');
+      registry[peerId] = { peerId, name, phone, avatar, lastSeen: Date.now() };
+      localStorage.setItem('ck77_users_registry', JSON.stringify(registry));
+    }
+
+    function loadStoredUsersList() {
+      let registry = JSON.parse(localStorage.getItem('ck77_users_registry') || '{}');
+      Object.keys(registry).forEach(pid => {
+        connectedPeersMap[pid] = registry[pid];
+      });
+    }
+
+    function initPeerSystem() {
+      peer = new Peer(myUniquePeerId);
+      peer.on('open', id => {
+        saveUserToPermanentRegistry(myUniquePeerId, userName, userPhone, userAvatarData);
+        connectToPeer(masterOwnerPeerId);
+      });
+
+      peer.on('connection', conn => {
+        setupConnection(conn);
+      });
+    }
+
+    function connectToPeer(targetPeerId) {
+      let conn = peer.connect(targetPeerId);
+      setupConnection(conn);
+    }
+
+    function setupConnection(conn) {
+      conn.on('open', () => {
+        conn.send({
+          type: 'profile_info',
+          name: userName || "खिलाड़ी",
+          phone: userPhone || "0000000000",
+          avatar: userAvatarData,
+          peerId: conn.peer
+        });
+      });
+
+      conn.on('data', data => {
+        if (typeof data === 'object') {
+          if (data.type === 'profile_info') {
+            connectedPeersMap[data.peerId] = {
+              conn: conn,
+              name: data.name,
+              phone: data.phone,
+              avatar: data.avatar,
+              peerId: data.peerId
+            };
+            saveUserToPermanentRegistry(data.peerId, data.name, data.phone, data.avatar);
+            updateActiveUsersUI();
+          } else if (data.type === 'image') {
+            appendMessage(conn.peer, `<img src="${data.url}" alt="Photo" onclick="openImagePreview('${data.url}', 'चैट फोटो')">`, 'received', true);
+            showAppNotification(data.senderName || "खिलाड़ी", "फोटो संदेश मिला 📸");
+          } else if (data.type === 'video') {
+            appendMessage(conn.peer, `<video controls src="${data.url}"></video>`, 'received', true);
+            showAppNotification(data.senderName || "खिलाड़ी", "वीडियो संदेश मिला 🎥");
+          } else if (data.type === 'audio') {
+            appendMessage(conn.peer, `<audio controls src="${data.url}"></audio>`, 'received', true);
+            showAppNotification(data.senderName || "खिलाड़ी", "वॉयस मैसेज मिला 🎙");
+          }
+        } else {
+          appendMessage(conn.peer, data, 'received', true);
+          showAppNotification("नया संदेश", data);
+        }
+      });
+
+      if (!connectedPeersMap[conn.peer]) {
+        connectedPeersMap[conn.peer] = { conn: conn, name: "खिलाड़ी", phone: "------", avatar: "", peerId: conn.peer };
+      }
+      updateActiveUsersUI();
+    }
+
+    function openMyProfileModal() {
+      document.getElementById('modalProfileImg').src = userAvatarData || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60';
+      document.getElementById('modalProfileName').innerText = userName || "चंदन (मालिक)";
+      document.getElementById('modalProfileStatus').innerText = 'ओरिजिनल सट्टा किंग मालिक';
+      document.getElementById('profileModal').style.display = 'flex';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+
+    function updateActiveUsersUI() {
+      const container = document.getElementById('activeUsersListContainer');
+      let registry = JSON.parse(localStorage.getItem('ck77_users_registry') || '{}');
+      let keys = Object.keys(registry);
+      
+      if (keys.length === 0) {
+        container.innerHTML = "<p style='color:#888; font-size:12px; text-align:center;'>कोई खिलाड़ी रजिस्टर नहीं है।</p>";
+        return;
+      }
+      
+      container.innerHTML = "";
+      keys.forEach(peerId => {
+        let user = registry[peerId];
+        let card = document.createElement('div');
+        card.className = 'admin-user-card';
+        card.innerHTML = `
+          <div class="admin-user-info">
+            <img src="${user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60'}" alt="User">
+            <div>
+              <h5>${user.name || "खिलाड़ी"}</h5>
+              <p>📱 ${user.phone || "नंबर उपलब्ध नहीं"}</p>
+            </div>
+          </div>
+          <button class="chat-open-btn" onclick="openDirectChatWithUser('${peerId}', '${user.name || "खिलाड़ी"}', '${user.avatar || ''}')">चैट 💬</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateAdminStatusUI() {
+      const container = document.getElementById('adminStatusListContainer');
+      let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+
+      if (savedStatuses.length === 0) {
+        container.innerHTML = "<p style='color:#888; font-size:12px; text-align:center;'>कोई स्टेटस उपलब्ध नहीं है।</p>";
+        return;
+      }
+
+      container.innerHTML = "";
+      savedStatuses.forEach(st => {
+        let div = document.createElement('div');
+        div.className = 'admin-user-card';
+        div.innerHTML = `
+          <div class="admin-user-info">
+            ${st.url ? `<img src="${st.url}" alt="Status">` : `<i class="fa-solid fa-bullhorn" style="font-size:24px; color:#00ffcc; width:45px; text-align:center;"></i>`}
+            <div>
+              <h5 style="color:#00ffcc;">${st.title}</h5>
+              <p>${st.time}</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:5px;">
+            <button class="chat-open-btn" style="background:linear-gradient(135deg,#00ffcc,#0055ff);" onclick="editStatusCaption(${st.id})">बदलाव</button>
+            <button class="chat-open-btn" style="background:linear-gradient(135deg,#ff0055,#ff00ff);" onclick="adminDeleteStatus(${st.id})">डिलीट</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function adminDeleteStatus(id) {
+      let pin = prompt("🔐 स्टेटस डिलीट करने के लिए ओनर पिन दर्ज करें:");
+      if(pin === "787016ck77") {
+        let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+        savedStatuses = savedStatuses.filter(st => st.id !== id);
+        localStorage.setItem('ck77_statuses', JSON.stringify(savedStatuses));
+        updateAdminStatusUI();
+        document.getElementById('statusListFeed').innerHTML = '';
+        loadSavedStatuses();
+        alert("स्टेटस सफलतापर्वक डिलीट कर दिया गया है!");
+      } else if(pin !== null) {
+        alert("⚠ गलत पिन!");
+      }
+    }
+
+    function editStatusCaption(id) {
+      let pin = prompt("🔐 स्टेटस में बदलाव के लिए ओनर पिन दर्ज करें:");
+      if(pin === "787016ck77") {
+        let newTitleText = prompt("रिजल्ट या स्टेटस के शीर्षक में नया बदलाव करें:");
+        if(newTitleText) {
+          let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+          savedStatuses = savedStatuses.map(st => {
+            if(st.id === id) st.title = newTitleText;
+            return st;
+          });
+          localStorage.setItem('ck77_statuses', JSON.stringify(savedStatuses));
+          updateAdminStatusUI();
+          document.getElementById('statusListFeed').innerHTML = '';
+          loadSavedStatuses();
+          alert("स्टेटस में सफलतापूर्वक बदलाव कर दिया गया है!");
+        }
+      } else if(pin !== null) {
+        alert("⚠ गलत पिन!");
+      }
+    }
+
+    function openDirectChatWithUser(peerId, name, avatar) {
+      activeChatTargetPeer = peerId;
+      document.getElementById('adminModal').style.display = 'none';
+      
+      document.getElementById('chatHeaderName').innerText = name;
+      document.getElementById('chatHeaderStatus').innerText = `ID: ${peerId}`;
+      if(avatar) document.getElementById('chatHeaderAvatar').src = avatar;
+
+      document.getElementById('mainHeader').style.display = 'none';
+      document.getElementById('whatsappTabs').style.display = 'none';
+      document.getElementById('chatsTab').style.display = 'none';
+      document.getElementById('chatHeader').style.display = 'flex';
+      document.getElementById('chatRoomView').style.display = 'flex';
+
+      loadChatHistoryForPeer(peerId);
+    }
+
+    function sendBroadcastMessage() {
+      const bMsg = document.getElementById('broadcastMsgInput').value.trim();
+      if(!bMsg) { alert("कृपया संदेश लिखें!"); return; }
+      
+      let registry = JSON.parse(localStorage.getItem('ck77_users_registry') || '{}');
+      Object.keys(registry).forEach(peerId => {
+        if (connectedPeersMap[peerId] && connectedPeersMap[peerId].conn && connectedPeersMap[peerId].conn.open) {
+          connectedPeersMap[peerId].conn.send(`📢 [सट्टा किंग ब्रॉडकास्ट]: ${bMsg}`);
+        }
+      });
+      alert("ब्रॉडकास्ट सफलतापूर्वक भेज दिया गया है!");
+      document.getElementById('broadcastMsgInput').value = '';
+    }
+
+    function viewOwnerProfileModal() {
+      document.getElementById('modalProfileImg').src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60';
+      document.getElementById('modalProfileName').innerText = "सट्टा किंग ओनर";
+      document.getElementById('modalProfileStatus').innerText = "मुख्य एडमिन";
+      document.getElementById('profileModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('profileModal').style.display = 'none';
+    }
+
+    function connectToOwner() {
+      activeChatTargetPeer = masterOwnerPeerId;
+      document.getElementById('chatHeaderName').innerText = "सट्टा किंग ओनर दरबार";
+      document.getElementById('chatHeaderStatus').innerText = "परमानेंट चैट रूम";
+      
+      document.getElementById('mainHeader').style.display = 'none';
+      document.getElementById('whatsappTabs').style.display = 'none';
+      document.getElementById('chatsTab').style.display = 'none';
+      document.getElementById('chatHeader').style.display = 'flex';
+      document.getElementById('chatRoomView').style.display = 'flex';
+
+      loadChatHistoryForPeer(masterOwnerPeerId);
+    }
+
+    function backToChats() {
+      document.getElementById('chatHeader').style.display = 'none';
+      document.getElementById('chatRoomView').style.display = 'none';
+      document.getElementById('mainHeader').style.display = 'flex';
+      document.getElementById('whatsappTabs').style.display = 'flex';
+      document.getElementById('chatsTab').style.display = 'flex';
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+      let targetId = activeChatTargetPeer || masterOwnerPeerId;
+
+      if (connectedPeersMap[targetId] && connectedPeersMap[targetId].conn && connectedPeersMap[targetId].conn.open) {
+        connectedPeersMap[targetId].conn.send(msg);
+      } else if (peer) {
+        let conn = peer.connect(targetId);
+        conn.on('open', () => conn.send(msg));
+      }
+
+      appendMessage(targetId, msg, 'sent', true);
+      input.value = '';
+    }
+
+    function sendMediaMessage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      const isVideo = file.type.startsWith('video');
+      let targetId = activeChatTargetPeer || masterOwnerPeerId;
+      
+      reader.onload = function() {
+        const base64Data = reader.result;
+        let payload = { type: isVideo ? 'video' : 'image', url: base64Data, senderName: userName };
+        
+        if (connectedPeersMap[targetId] && connectedPeersMap[targetId].conn && connectedPeersMap[targetId].conn.open) {
+          connectedPeersMap[targetId].conn.send(payload);
+        }
+
+        if (isVideo) {
+          appendMessage(targetId, `<video controls src="${base64Data}"></video>`, 'sent', true);
+        } else {
+          appendMessage(targetId, `<img src="${base64Data}" alt="Photo" onclick="openImagePreview('${base64Data}', 'चैट फोटो')">`, 'sent', true);
+        }
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function appendMessage(targetPeerId, content, type, saveToStorage = false) {
+      const chatBox = document.getElementById('chatMessages');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const currentTime = Date.now();
+
+      if (saveToStorage) {
+        let allHistories = JSON.parse(localStorage.getItem('ck77_multi_chat') || '{}');
+        if (!allHistories[targetPeerId]) allHistories[targetPeerId] = [];
+        allHistories[targetPeerId].push({ content, type, time: currentTime, timeStr });
+        localStorage.setItem('ck77_multi_chat', JSON.stringify(allHistories));
+      }
+
+      if (activeChatTargetPeer === targetPeerId || (targetPeerId === masterOwnerPeerId && activeChatTargetPeer === null)) {
+        const div = document.createElement('div');
+        div.className = `message ${type}`;
+        div.innerHTML = `
+          ${content}
+          <div class="message-footer">
+            <button class="delete-msg-btn" onclick="this.closest('.message').remove()">डिलीट</button>
+            <span class="message-time">${timeStr}</span>
+          </div>
+        `;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }
+
+    function loadChatHistoryForPeer(targetPeerId) {
+      const chatBox = document.getElementById('chatMessages');
+      chatBox.innerHTML = '';
+      
+      let allHistories = JSON.parse(localStorage.getItem('ck77_multi_chat') || '{}');
+      let history = allHistories[targetPeerId] || [];
+      
+      history.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `message ${item.type}`;
+        div.innerHTML = `
+          ${item.content}
+          <div class="message-footer">
+            <button class="delete-msg-btn" onclick="this.closest('.message').remove()">डिलीट</button>
+            <span class="message-time">${item.timeStr || ''}</span>
+          </div>
+        `;
+        chatBox.appendChild(div);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function postTextStatusOnly() {
+      let title = document.getElementById('statusTitleInput').value.trim();
+      if(!title) { alert("कृपया स्टेटस या रिजल्ट का विवरण लिखें!"); return; }
+
+      let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+      let statusObj = { 
+        id: Date.now(), 
+        url: "", 
+        title: title, 
+        name: "सट्टा किंग ओनर", 
+        time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+      };
+      savedStatuses.push(statusObj);
+      localStorage.setItem('ck77_statuses', JSON.stringify(savedStatuses));
+      renderStatusItem(statusObj);
+      document.getElementById('statusTitleInput').value = '';
+      alert("✅ रिजल्ट स्टेटस सफलतापूर्वक लाइव कर दिया गया है!");
+    }
+
+    function uploadMyStatusWithTitle(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      let title = document.getElementById('statusTitleInput').value.trim() || "गाजियाबाद / दिसावर रिजल्ट अपडेट 🎯";
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        const statusImgUrl = reader.result;
+        let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+        let statusObj = { 
+          id: Date.now(), 
+          url: statusImgUrl, 
+          title: title, 
+          name: "सट्टा किंग ओनर", 
+          time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) 
+        };
+        savedStatuses.push(statusObj);
+        localStorage.setItem('ck77_statuses', JSON.stringify(savedStatuses));
+        renderStatusItem(statusObj);
+        document.getElementById('statusTitleInput').value = '';
+        alert("✅ फोटो/वीडियो रिजल्ट स्टेटस सफलतापूर्वक अपलोड हो गया है!");
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function loadSavedStatuses() {
+      let savedStatuses = JSON.parse(localStorage.getItem('ck77_statuses') || '[]');
+      savedStatuses.forEach(st => renderStatusItem(st));
+    }
+
+    function renderStatusItem(stObj) {
+      const feed = document.getElementById('statusListFeed');
+      const newItem = document.createElement('div');
+      newItem.className = 'status-card-box';
+      newItem.id = `status-item-${stObj.id}`;
+      
+      let leftHtml = '';
+      if(stObj.url) {
+        leftHtml = `
+          <div class="status-left" onclick="openImagePreview('${stObj.url}', '${stObj.title}')">
+            <div class="status-ring-large" style="width: 50px; height: 50px;">
+              <img src="${stObj.url}" alt="Status">
+            </div>
+            <div class="status-info-text">
+              <h4 style="color:#00ffcc;">${stObj.title}</h4>
+              <p style="color:#ffff00;">${stObj.time} - क्लिक करके देखें</p>
+            </div>
+          </div>
+        `;
+      } else {
+        leftHtml = `
+          <div class="status-left" onclick="alert('${stObj.title}')">
+            <div class="status-ring-large" style="width: 50px; height: 50px; background:linear-gradient(135deg,#00ffcc,#ff0055); display:flex; align-items:center; justify-content:center; border-radius:50%;">
+              <i class="fa-solid fa-bullhorn" style="font-size:20px; color:#fff;"></i>
+            </div>
+            <div class="status-info-text">
+              <h4 style="color:#00ffcc;">${stObj.title}</h4>
+              <p style="color:#ffff00;">${stObj.time} - ओनर अपडेट</p>
+            </div>
+          </div>
+        `;
+      }
+      newItem.innerHTML = leftHtml;
+      feed.prepend(newItem);
+    }
+
+    let mediaRecorder, audioChunks = [], isRecording = false;
+    function toggleVoiceRecording() {
+      const micBtn = document.getElementById('micRecordBtn');
+      let targetId = activeChatTargetPeer || masterOwnerPeerId;
+
+      if (!isRecording) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.onload = function() {
+              const base64Audio = reader.result;
+              let payload = { type: 'audio', url: base64Audio, senderName: userName };
+              
+              if (connectedPeersMap[targetId] && connectedPeersMap[targetId].conn && connectedPeersMap[targetId].conn.open) {
+                connectedPeersMap[targetId].conn.send(payload);
+              }
+              appendMessage(targetId, `<audio controls src="${base64Audio}"></audio>`, 'sent', true);
+            };
+            reader.readAsDataURL(audioBlob);
+          };
+          mediaRecorder.start();
+          isRecording = true;
+          micBtn.classList.add('recording');
+        }).catch(err => alert("माइक्रोफोन की अनुमति नहीं मिली!"));
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        micBtn.classList.remove('recording');
+      }
+    }
+
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.wa-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+  </script>
+</body>
+</html>
